@@ -9,13 +9,19 @@ class BooksGrid extends Component {
     }
 
     render() {
+
+        const { books } = this.props;
+
         return (
             <ol className="books-grid">
                 {books && books.length &&
                     books.map((book) => (
-                        <Book
-                            book={book}
-                        />))}
+                        <li key={book.id}>
+                            <Book
+                                book={book}
+                            />
+                        </li>
+                    ))}
             </ol>
         );
     }
