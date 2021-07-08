@@ -6,12 +6,13 @@ class BookShelf extends Component {
 
     static propTypes = {
         books: PropTypes.array.isRequired,
-        shelfTitle: PropTypes.string.isRequired
+        shelfTitle: PropTypes.string.isRequired,
+        handleBookChange: PropTypes.func.isRequired
     }
 
     render() {
 
-        const { books, shelfTitle } = this.props;
+        const { books, shelfTitle, handleBookChange } = this.props;
 
         return (
             <div className="bookshelf">
@@ -19,6 +20,7 @@ class BookShelf extends Component {
                 <div className="bookshelf-books">
                     <BooksGrid
                         books={books}
+                        handleBookChange={handleBookChange}
                     />
                 </div>
             </div>
