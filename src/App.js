@@ -17,13 +17,17 @@ class BooksApp extends React.Component {
     this.setState({ books });
   }
 
+  async componentDidUpdate() {
+    const books = await BooksApi.getAll();
+    this.setState({ books });
+  }
+
   handleShelfChange = (book, shelf) => {
     this.setState((prevState) => {
       prevState.books.filter(item => item.id === book.id).map(item => item.shelf = shelf)
       return prevState;
     });
   }
-
 
   render() {
     return (
@@ -37,7 +41,7 @@ class BooksApp extends React.Component {
         <Route
           path='/search'
           render={() => (
-            <SearchBooks />
+            <SearchBooks booksShelf={this.state.books.map(item => ({ bookId: item.id, shelf: item.shelf }))} />
           )}
         />
       </div>

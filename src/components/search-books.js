@@ -2,7 +2,13 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import * as BooksApi from '../BooksAPI';
 import Book from './book';
+import PropTypes from 'prop-types';
+
 class SearchBooks extends Component {
+
+  static propTypes = {
+    booksShelf: PropTypes.array.isRequired
+  }
 
   state = {
     searchResult: [],
@@ -25,14 +31,22 @@ class SearchBooks extends Component {
     }
   }
 
-  handleMove = (book, shelf) => {
+  handleMove = (book, shelf, updateResult) => {
     this.setState((prevState) => {
-      prevState.searchResult.filter(item => item.id === book.id).map(item => item.shelf = shelf)
+      let myBookIds = [];
+      for (const key in updateResult) {
+        prevState.searchResult.filter(item => updateResult[key].includes(item.id)).map(book => book.shelf = key);
+        myBookIds = myBookIds.concat(updateResult[key]);
+      }
+      prevState.searchResult.filter(item => !myBookIds.includes(item.id)).map(book => book.shelf = 'none');
       return prevState;
     });
   }
 
   render() {
+
+    const { booksShelf } = this.props;
+
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -55,7 +69,11 @@ class SearchBooks extends Component {
             {this.state.searchResult.length > 0 && this.state.searchResult.map(item => (
               <li key={item.id}>
                 <Book
-                  book={item}
+                  book={{ ...item }}
+                  bookShelf={item.shelf ? item.shelf :
+                    (booksShelf.filter(bookShelf => bookShelf.bookId === item.id).length > 0 ?
+                      booksShelf.filter(bookShelf => bookShelf.bookId === item.id)[0].shelf :
+                      'none')}
                   handleBookStatusChange={this.handleMove}
                 />
               </li>

@@ -5,18 +5,20 @@ import * as BooksApi from '../BooksAPI';
 class Book extends Component {
     static propTypes = {
         book: PropTypes.object.isRequired,
-        handleBookStatusChange: PropTypes.func.isRequired
+        handleBookStatusChange: PropTypes.func.isRequired,
+        bookShelf: PropTypes.string.isRequired
     }
 
     handleChange = (selectedValue) => {
         BooksApi.update(this.props.book, selectedValue).then((result) => {
-            this.props.handleBookStatusChange(this.props.book, selectedValue);
+            this.props.handleBookStatusChange(this.props.book, selectedValue, result);
         });
     }
 
     render() {
 
         const { book } = this.props;
+        book.shelf = this.props.bookShelf;
 
         return (
             <div className="book">
@@ -24,7 +26,7 @@ class Book extends Component {
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks ? book.imageLinks.thumbnail : ""})` }}></div>
                     <div className="book-shelf-changer">
                         <select
-                            value={book.shelf ? book.shelf : 'none'}
+                            value={this.props.bookShelf}
                             onChange={(event) => this.handleChange(event.target.value)}
                         >
                             <option value="move" disabled>Move to...</option>

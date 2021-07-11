@@ -20,6 +20,7 @@ class BooksGrid extends Component {
                         <li key={book.id}>
                             <Book
                                 book={book}
+                                bookShelf={book.shelf}
                                 handleBookStatusChange={handleBookChange}
                             />
                         </li>
