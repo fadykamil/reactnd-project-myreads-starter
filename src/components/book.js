@@ -9,7 +9,6 @@ class Book extends Component {
     }
 
     handleChange = (selectedValue) => {
-        console.log(selectedValue);
         BooksApi.update(this.props.book, selectedValue).then((result) => {
             this.props.handleBookStatusChange(this.props.book, selectedValue);
         });

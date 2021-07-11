@@ -18,7 +18,6 @@ class SearchBooks extends Component {
 
     if (key) {
       BooksApi.search(key).then((results) => {
-        console.log(results);
         this.setState({
           searchResult: !results.error ? results : []
         });
@@ -27,7 +26,6 @@ class SearchBooks extends Component {
   }
 
   handleMove = (book, shelf) => {
-    //console.log(selectedValue);
     this.setState((prevState) => {
       prevState.searchResult.filter(item => item.id === book.id).map(item => item.shelf = shelf)
       return prevState;
