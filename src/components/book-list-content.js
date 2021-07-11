@@ -1,45 +1,35 @@
 import React, { Component } from 'react';
 import BookShelf from './books-shelf';
 import * as BooksApi from '../BooksAPI';
+import PropTypes from 'prop-types';
 
 class BookListContent extends Component {
 
-    state = {
-        books: []
-    }
-
-    componentDidMount() {
-        BooksApi.getAll().then((books) => {
-            this.setState(() => ({
-                books
-            }));
-        });
-    }
-
-    handleShelfChange = (book, shelf) => {
-        this.setState((prevState) => {
-            prevState.books.filter(item => item.id === book.id).map(item => item.shelf = shelf)
-            return prevState;
-        });
+    static propTypes = {
+        books: PropTypes.array.isRequired,
+        handleShelfChange: PropTypes.func.isRequired
     }
 
     render() {
+
+        const { books, handleShelfChange } = this.props;
+
         return (
             <div>
                 <BookShelf
-                    books={this.state.books.filter((item) => (item.shelf === "currentlyReading"))}
+                    books={books.filter((item) => (item.shelf === "currentlyReading"))}
                     shelfTitle="Currently Reading"
-                    handleBookChange={this.handleShelfChange}
+                    handleBookChange={handleShelfChange}
                 />
                 <BookShelf
-                    books={this.state.books.filter((item) => (item.shelf === "wantToRead"))}
+                    books={books.filter((item) => (item.shelf === "wantToRead"))}
                     shelfTitle="Want to Read"
-                    handleBookChange={this.handleShelfChange}
+                    handleBookChange={handleShelfChange}
                 />
                 <BookShelf
-                    books={this.state.books.filter((item) => (item.shelf === "read"))}
+                    books={books.filter((item) => (item.shelf === "read"))}
                     shelfTitle="Read"
-                    handleBookChange={this.handleShelfChange}
+                    handleBookChange={handleShelfChange}
                 />
             </div>
         )
