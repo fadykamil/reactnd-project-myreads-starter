@@ -16,12 +16,7 @@ class BooksApp extends React.Component {
     const books = await BooksApi.getAll();
     this.setState({ books });
   }
-
-  async componentDidUpdate() {
-    //const books = await BooksApi.getAll();
-    //this.setState({ books });
-  }
-
+  
   handleShelfChange = (book, shelf) => {
     this.setState((prevState) => {
       prevState.books.filter(item => item.id === book.id).map(item => item.shelf = shelf)
