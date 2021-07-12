@@ -18,8 +18,8 @@ class BooksApp extends React.Component {
   }
 
   async componentDidUpdate() {
-    const books = await BooksApi.getAll();
-    this.setState({ books });
+    //const books = await BooksApi.getAll();
+    //this.setState({ books });
   }
 
   handleShelfChange = (book, shelf) => {

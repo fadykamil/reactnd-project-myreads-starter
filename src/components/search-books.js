@@ -3,11 +3,18 @@ import { Link } from 'react-router-dom';
 import * as BooksApi from '../BooksAPI';
 import Book from './book';
 import PropTypes from 'prop-types';
+import debounce from 'lodash.debounce';
 
 class SearchBooks extends Component {
 
   static propTypes = {
     booksShelf: PropTypes.array.isRequired
+  }
+
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.emitChangeDebounced = debounce(this.emitChange, 250);
   }
 
   state = {
@@ -16,7 +23,11 @@ class SearchBooks extends Component {
     availableKeys: ['Android', 'Art', 'Artificial Intelligence', 'Astronomy', 'Austen', 'Baseball', 'Basketball', 'Bhagat', 'Biography', 'Brief', 'Business', 'Camus', 'Cervantes', 'Christie', 'Classics', 'Comics', 'Cook', 'Cricket', 'Cycling', 'Desai', 'Design', 'Development', 'Digital Marketing', 'Drama', 'Drawing', 'Dumas', 'Education', 'Everything', 'Fantasy', 'Film', 'Finance', 'First', 'Fitness', 'Football', 'Future', 'Games', 'Gandhi', 'Homer', 'Horror', 'Hugo', 'Ibsen', 'Journey', 'Kafka', 'King', 'Lahiri', 'Larsson', 'Learn', 'Literary Fiction', 'Make', 'Manage', 'Marquez', 'Money', 'Mystery', 'Negotiate', 'Painting', 'Philosophy', 'Photography', 'Poetry', 'Production', 'Programming', 'React', 'Redux', 'River', 'Robotics', 'Rowling', 'Satire', 'Science Fiction', 'Shakespeare', 'Singh', 'Swimming', 'Tale', 'Thrun', 'Time', 'Tolstoy', 'Travel', 'Ultimate', 'Virtual Reality', 'Web Development', 'iOS']
   }
 
-  updateSearchKey = (key) => {
+  handleChange(e) {
+    this.emitChangeDebounced(e.target.value);
+  }
+
+  emitChange(key) {
     this.setState({
       searchKey: key,
       searchResult: []
@@ -31,6 +42,22 @@ class SearchBooks extends Component {
     }
   }
 
+
+  // updateSearchKey = (key) => {
+  //   this.setState({
+  //     searchKey: key,
+  //     searchResult: []
+  //   });
+
+  //   if (key) {
+  //     BooksApi.search(key).then((results) => {
+  //       this.setState({
+  //         searchResult: !results.error ? results : []
+  //       });
+  //     });
+  //   }
+  // }
+
   handleMove = (book, shelf, updateResult) => {
     this.setState((prevState) => {
       let myBookIds = [];
@@ -41,6 +68,11 @@ class SearchBooks extends Component {
       prevState.searchResult.filter(item => !myBookIds.includes(item.id)).map(book => book.shelf = 'none');
       return prevState;
     });
+  }
+
+
+  componentWillUnmount() {
+    this.emitChangeDebounced.cancel();
   }
 
   render() {
@@ -60,7 +92,7 @@ class SearchBooks extends Component {
               type="text"
               placeholder="Search by title or author"
               value={this.searchKey}
-              onChange={(event) => { this.updateSearchKey(event.target.value) }}
+              onChange={this.handleChange}
             />
           </div>
         </div>
